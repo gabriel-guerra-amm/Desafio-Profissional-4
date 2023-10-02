@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Medico extends Pessoa {
 
-    //private Calendario calendario;
     private List<LocalDateTime> agenda;
     private Cargo cargo;
     private TipoMedico tipoMedico;
@@ -19,19 +18,17 @@ public class Medico extends Pessoa {
             String nome,
             Date dataNascimento,
             String cpf,
-
-            // Calendario calendario,
             Cargo cargo,
-            TipoMedico tipoMedico
-    ) {
+            TipoMedico tipoMedico) {
         super(nome, dataNascimento, cpf);
-        //this.calendario = calendario;
         this.cargo = cargo;
         this.tipoMedico = tipoMedico;
         this.agenda = new ArrayList<LocalDateTime>();
     }
 
-    public void atenderPaciente(Paciente paciente) {
+    public void atenderPaciente(Paciente paciente, LocalDateTime dataHora, String sintomas, String diagnostico, String medicamentos, String observacoes) {
+        FichaPaciente ficha = new FichaPaciente(dataHora, sintomas, diagnostico, medicamentos, observacoes);
+        paciente.adicionarNovaFicha(ficha);
     }
 
     public void adicionarAgenda(LocalDateTime data){

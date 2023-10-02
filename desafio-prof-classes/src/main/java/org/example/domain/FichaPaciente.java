@@ -1,12 +1,16 @@
 package org.example.domain;
 
+import java.time.LocalDateTime;
+
 public class FichaPaciente{
+    private LocalDateTime dataHoraConsulta;
     private String sintomas;
     private String diagnostico;
     private String medicamentos;
     private String observacoes;
 
-    public FichaPaciente(String sintomas, String diagnostico, String medicamentos, String obsevacoes){
+    public FichaPaciente(LocalDateTime dataHoraConsulta, String sintomas, String diagnostico, String medicamentos, String observacoes) {
+        this.dataHoraConsulta = dataHoraConsulta;
         this.sintomas = sintomas;
         this.diagnostico = diagnostico;
         this.medicamentos = medicamentos;

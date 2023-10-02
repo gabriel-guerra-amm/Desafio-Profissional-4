@@ -1,7 +1,7 @@
 package org.example.domain.enums;
 
 public enum Estado{
-    ACRE(""),
+    ACRE("Acre"),
     ALAGOAS("Alagoas"),
     AMAPA("Amapá"),
     AMAZONAS("Amazonas"),

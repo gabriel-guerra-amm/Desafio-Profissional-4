@@ -1,12 +1,13 @@
 package org.example.domain;
 
 import org.example.domain.enums.Cargo;
+import org.example.domain.enums.TipoConsulta;
 import org.example.service.OperacoesService;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class Atendente extends Pessoa implements OperacoesService {
+public class Atendente extends Pessoa {
 
     private Cargo cargo;
 
@@ -27,9 +28,9 @@ public class Atendente extends Pessoa implements OperacoesService {
 
     }
 
-    @Override
-    public void agendarConsulta(Medico medico, LocalDateTime data){
-        medico.adicionarAgenda(data);
+    public void agendarConsulta(Paciente paciente, Medico medico, TipoConsulta tipoConsulta, LocalDateTime dataHora){
+        medico.adicionarAgenda(dataHora);
+        paciente.criarConsulta(dataHora, medico, tipoConsulta);
     }
 
 }

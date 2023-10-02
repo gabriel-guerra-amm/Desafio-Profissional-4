@@ -1,9 +1,8 @@
 package org.example.domain.enums;
 
 public enum Municipio {
-    MARINGA("Maringa");
+    MARINGA("Maringá");
     //Rever enum. Muita informacao +- 5570 municipios, necessário validação
-
 
     private String nomeMunicipio;
 
