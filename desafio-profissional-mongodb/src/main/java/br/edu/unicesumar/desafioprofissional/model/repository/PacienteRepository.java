@@ -15,11 +15,5 @@ public interface PacienteRepository extends MongoRepository<Paciente, String> {
     @Query("{cpf:'?0'}")
     Paciente findByCpf(String cpf);
 
-    /*
-    @Query(value="{endereco:'?0'}", fields="{'nome' : 1, 'quantity' : 1}")
-    List<Paciente> findAll(String endereco);
-
-    public long count();
-    */
 
 }

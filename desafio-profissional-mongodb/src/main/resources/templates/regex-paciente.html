@@ -59,27 +59,50 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">CPF</th>
             <th scope="col">Nome</th>
+            <th scope="col">CPF</th>
             <th scope="col">Endereço</th>
             <th scope="col">Data Nascimento</th>
             <th scope="col">E-mail</th>
             <th scope="col">Telefone</th>
+            <th scope="col">Gênero</th>
             <th scope="col">Ações</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="p : ${pacientes}">
-            <td th:text="${p.cpf}"></td>
+        <tr th:each="p, row : ${pacientes}">
             <td th:text="${p.nome}"></td>
+            <td th:text="${p.cpf}"></td>
             <td th:text="${p.endereco}"></td>
             <td th:text="${p.data_nascimento}"></td>
             <td th:text="${p.email}"></td>
             <td th:text="${p.telefone}"></td>
+            <td th:text="${p.genero}"></td>
             <td>
-                <button type="button" class="btn btn-outline-info">Editar</button>
-                <button type="button" class="btn btn-outline-danger">Excluir</button>
+                <a class="btn btn-outline-info" th:href="@{/paciente/editar/{cpf}(cpf=${p.cpf})}">Editar</a>
+                <a class="btn btn-outline-danger" data-bs-toggle="modal" th:data-bs-target="'#confirmDeleteModal-' + ${row.index}">Excluir</a>
+
+                <div class="modal fade" th:id="'confirmDeleteModal-' + ${row.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Confirmar Exclusão</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Tem certeza que deseja excluir este paciente?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <form th:action="@{/paciente/excluir/{cpf}(cpf=${p.cpf})}" method="post" id="deleteForm">
+                                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </td>
         </tr>
         </tbody>
@@ -88,11 +111,27 @@
     <a class="btn btn-primary" href="/paciente/novo">Novo</a>
 </div>
 
+
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 
-</body>
+<script>
+    function buscarPacientes() {
+        var inputValue = document.getElementById("searchInput").value;
 
+        if (inputValue !== null && inputValue.trim() !== "") {
+            window.location.href = "/paciente/pesquisa/" + inputValue;
+        }
+    }
+</script>
+
+<script>
+    function confirmarExclusao() {
+        document.getElementById('deleteForm').submit();
+    }
+</script>
+
+</body>
 </html>
