@@ -4,11 +4,13 @@ import br.edu.unicesumar.desafioprofissional.model.domain.Medico;
 import br.edu.unicesumar.desafioprofissional.model.domain.Paciente;
 import br.edu.unicesumar.desafioprofissional.model.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/medico")
 public class MedicoController {
 
@@ -16,8 +18,12 @@ public class MedicoController {
     MedicoRepository mr;
 
     @GetMapping
-    public List<Medico> getAllMedico(){
-        return mr.findAll();
+    public ModelAndView getAllMedico(){
+        ModelAndView view = new ModelAndView("lista-medicos");
+
+        view.addObject("medicos", mr.findAll());
+
+        return view;
     }
 
     @GetMapping("/{crm}")
@@ -25,44 +31,60 @@ public class MedicoController {
         return mr.findByCrm(crm);
     }
 
+
     @GetMapping("/pesquisa/{regex}")
-    public List<Medico> getMedicoByRegex(@PathVariable String regex){
-        return mr.findByRegex(regex);
+    public ModelAndView getMedicoByRegex(@PathVariable String regex){
+
+        ModelAndView view = new ModelAndView("regex-medico");
+        view.addObject("medicos", mr.findByRegex(regex));
+        return view;
+
+    }
+
+    @GetMapping("/novo")
+    public ModelAndView formCreate(){
+        ModelAndView view = new ModelAndView("novo-medico");
+
+        view.addObject("m", new Medico());
+
+        return view;
     }
 
     @PostMapping
-    public String createMedico(@RequestBody Medico m){
+    public String createPaciente(Medico m){
         mr.save(m);
-        return "Médico cadastrado com sucesso.";
+        return "redirect:/medico";
     }
 
-    @PutMapping("/{crm}")
-    public String updateMedicoByCpf(@PathVariable String crm, @RequestBody Medico m){
+    @GetMapping("/editar/{crm}")
+    public ModelAndView formUpdate(@PathVariable String crm){
 
-        Medico medicoDb = mr.findByCrm(crm);
+        ModelAndView view = new ModelAndView("editar-medico");
 
-        if (medicoDb == null){
-            mr.save(m);
-            return "Médico cadastrado com sucesso.";
-        }
+        Medico m = getMedicoByCrm(crm);
 
-        m.setId(medicoDb.getId());
-        mr.save(m);
+        view.addObject("m", m);
 
-        return "Médico atualizado com sucesso.";
+        return view;
     }
 
-    @DeleteMapping("/{crm}")
-    public String deletePacienteByCpf(@PathVariable String crm){
+    @PostMapping("/{crm}")
+    public String updateMedicoByCpf(@PathVariable String crm, Medico m){
 
-        Medico medicoDb = mr.findByCrm(crm);
+        Medico medicoDB = mr.findByCrm(crm);
 
-        if (medicoDb == null){
-            return "Médico não encontrado.";
-        }
+        m.setId(medicoDB.getId());
 
-        mr.delete(medicoDb);
-        return "Cadastro de médico excluído";
+        mr.save(m);
+        return "redirect:/medico";
+    }
+
+    @PostMapping("/excluir/{crm}")
+    public String deleteMedicoByCrm(@PathVariable String crm){
+
+        Medico medicoDB = mr.findByCrm(crm);
+        mr.delete(medicoDB);
+        return "redirect:/medico";
     }
 
 }
